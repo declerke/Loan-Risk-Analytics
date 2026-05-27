@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: mart_loan_portfolio_summary
+    description: Portfolio KPIs grouped by segment — feeds Portfolio Overview dashboard page
+    columns:
+      - name: loan_count
+        tests: [not_null]
+      - name: default_rate_pct
+        tests: [not_null]
+      - name: npl_rate_pct
+        tests: [not_null]
+
+  - name: mart_npl_analysis
+    description: NPL breakdown by DPD bucket and IFRS 9 stage with provision coverage
+    columns:
+      - name: npl_rate_pct
+        tests: [not_null]
+      - name: provision_coverage_pct
+        tests: [not_null]
+
+  - name: mart_vintage_curves
+    description: Month-by-month default and delinquency rates by credit cohort
+    columns:
+      - name: cohort
+        tests: [not_null]
+      - name: month_num
+        tests: [not_null]
+      - name: delinquency_rate_pct
+        tests: [not_null]
+
+  - name: mart_regulatory_ratios
+    description: Kenya banking sector macro ratios from World Bank with CBK threshold flags
+    columns:
+      - name: year
+        tests: [not_null, unique]
+      - name: npl_status
+        tests:
+          - accepted_values:
+              values: ['OK', 'WATCH', 'BREACH']
+      - name: capital_status
+        tests:
+          - accepted_values:
+              values: ['OK', 'BREACH']
+
+  - name: mart_ecl_estimates
+    description: IFRS 9 ECL aggregates by stage and credit size bucket
+    columns:
+      - name: ifrs9_stage
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Stage 1', 'Stage 2', 'Stage 3']
+      - name: total_ecl
+        tests: [not_null]

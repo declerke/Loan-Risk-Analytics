@@ -1,0 +1,76 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: raw_worldbank_banking
+        description: Kenya macro banking indicators from World Bank Open Data API
+        columns:
+          - name: year
+            tests: [not_null, unique]
+          - name: npl_ratio_pct
+            description: Bank non-performing loans to total gross loans (%)
+          - name: credit_private_sector_gdp_pct
+            description: Domestic credit to private sector by banks (% of GDP)
+          - name: bank_capital_assets_ratio_pct
+            description: Bank capital to assets ratio (%)
+          - name: gdp_growth_annual_pct
+            description: GDP growth annual (%)
+          - name: inflation_cpi_annual_pct
+            description: Inflation consumer prices annual (%)
+          - name: country_code
+            tests: [not_null]
+
+      - name: raw_credit_default
+        description: UCI Credit Card Default dataset — 30,000 real client records
+        columns:
+          - name: id
+            tests: [not_null, unique]
+          - name: credit_limit
+            tests: [not_null]
+          - name: is_default
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [0, 1]
+
+      - name: raw_bank_marketing
+        description: UCI Bank Marketing dataset — 41,188 real customer records
+        columns:
+          - name: id
+            tests: [not_null, unique]
+          - name: age
+            tests: [not_null]
+          - name: subscribed_term_deposit
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['yes', 'no']
+
+models:
+  - name: stg_worldbank_banking
+    description: Cleaned Kenya macro banking indicators
+    columns:
+      - name: year
+        tests: [not_null, unique]
+      - name: country_code
+        tests: [not_null]
+
+  - name: stg_credit_default
+    description: Cleaned credit card default records with renamed columns
+    columns:
+      - name: id
+        tests: [not_null, unique]
+      - name: credit_limit
+        tests: [not_null]
+      - name: is_default
+        tests: [not_null]
+
+  - name: stg_bank_marketing
+    description: Cleaned bank marketing campaign records
+    columns:
+      - name: id
+        tests: [not_null, unique]
+      - name: age
+        tests: [not_null]

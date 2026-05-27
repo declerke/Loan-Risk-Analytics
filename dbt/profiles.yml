@@ -1,0 +1,7 @@
+loan_risk:
+  outputs:
+    dev:
+      type: duckdb
+      path: /opt/airflow/data/warehouse.duckdb
+      threads: 1
+  target: dev

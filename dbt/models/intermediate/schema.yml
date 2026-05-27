@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: int_loan_delinquency_buckets
+    description: Loans classified by worst DPD bucket across 6-month observation window
+    columns:
+      - name: id
+        tests: [not_null, unique]
+      - name: dpd_bucket
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Current', '1-30 DPD', '31-60 DPD', '61-90 DPD', '90+ DPD']
+      - name: risk_grade
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4]
+
+  - name: int_portfolio_segments
+    description: Loans enriched with age bands, credit size buckets, utilisation, and NPL flag
+    columns:
+      - name: id
+        tests: [not_null, unique]
+      - name: is_npl
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: utilisation_rate_pct
+        tests: [not_null]
+
+  - name: int_ecl_inputs
+    description: IFRS 9 ECL inputs — stage, PD, LGD, EAD, ECL amount per loan
+    columns:
+      - name: id
+        tests: [not_null, unique]
+      - name: ifrs9_stage
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Stage 1', 'Stage 2', 'Stage 3']
+      - name: ecl_amount
+        tests: [not_null]
